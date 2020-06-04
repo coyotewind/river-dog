@@ -1,0 +1,100 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none !important;
+}
+
+body {
+    font-family: 'Oswald',sans-serif;
+    letter-spacing: 1px;
+    background-color: #EEEEEE;
+}
+
+header {
+    margin: 0 auto;
+    padding: 20px 0;
+    text-align: center;
+    width: 800px
+}
+
+h1 { font-size: 50px; }
+h3 { 
+    font-size: 24px; 
+    font-weight: 400;
+}
+
+.game-board {
+    padding-bottom: 40px;
+}
+
+.board { 
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    display: grid;
+    grid-template-rows: 180px 220px 180px;
+    grid-template-columns: 200px 240px 200px;
+    grid-gap: 0;
+    height: 100%;
+    margin: 0 auto;
+    max-width: 720px;
+    padding: 40px;
+    transition: all 0.3s ease;
+}
+
+.square {
+    align-items: center;
+    font-family: 'Permanent Marker', sans-serif;
+    font-size: 144px;
+    display: flex;
+    justify-content: center;
+    opacity: 1;
+    padding-bottom: 20px;
+    transition: opacity 0.3 ease-in-out, visibility 0.3s ease-in-out; 
+    visibility: visible;
+}
+
+.board > div:nth-child(n+4):nth-child(-n+6) { 
+    border-top: 20px solid #1A1A1A;
+    border-bottom: 20px solid #1A1A1A;
+}
+
+.board > div:nth-child(3n+2) { 
+    border-left: 20px solid #1A1A1A;
+    border-right: 20px solid #1A1A1A;  
+}
+
+.upper-controls {
+    margin: 0px auto 30px;
+    max-width: 800px;
+    text-align: center;
+    width: 100%;  
+}
+
+.current-turn {
+    color: #5a1d41;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.lower-controls {
+    margin: 0 auto;
+    max-width: 800px;
+    text-align: center;
+    width: 100%;  
+}
+
+.btn {
+    background: #5a1d41;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-size: 19px;
+    font-weight: 700;
+    padding: 15px;
+    width: 200px;
+}
+
+.btn:hover { 
+    background: #5a3d5c; 
+}
