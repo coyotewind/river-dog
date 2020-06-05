@@ -56,7 +56,6 @@ function renderBoard() {
             gameBoard[row][col] = 'o';
         }
     }
-
     checkForWin();
 
     $('.current-turn').text(`Player ${ currentPlayer } Goes Next...`);
@@ -79,6 +78,8 @@ $('.square').click(renderBoard)
 // todo: add check for diagnal win here
 // todo: write a check if 0,0 1,1 2,2 match or
 // todo: write a check if 2,0 1,1 0,2 match
+// todo: prevent continued play after win
+// todo: create  better message for winner
 
 function checkForWin() {
     for (let i = 0; i < createGrid; i++) {
@@ -88,16 +89,24 @@ function checkForWin() {
                     console.log('you win');
                     return true;
                 }
-                else if( gameBoard[0][j] === gameBoard[1][j] && gameBoard[i][1] === gameBoard[2][j]) {
+                else if( gameBoard[0][j] === gameBoard[1][j] && gameBoard[1][j] === gameBoard[2][j]) {
                     console.log('you win');
                     return true;
                 }
-                //add diagnal check here
+                else if (
+                    gameBoard[0][0] === gameBoard[1][1] && gameBoard[1][1] === gameBoard[2][2] ||
+                    gameBoard[2][0] === gameBoard[1][1] && gameBoard[1][1] === gameBoard[0][2]) {
+                    console.log('you win');
+                    return true;
+                }
+                else { 
+                    console.log('keep playing');
+                    return false; 
+                }
             }
         }
     }
 }
-
 
 // click handler attached to button to reset game
 // empty all the square of existing conent
