@@ -75,39 +75,42 @@ $('.square').click(renderBoard)
 // check that indices are not null and continue
 // check gameBoard rows for matching combination
 // check gameBoard cols for matching combination
-// check gameBoard diagnola for matching conditions
-// things really started worknig after adding return true
+// todo: add check for diagnal win here
+// todo: write a check if 0,0 1,1 2,2 match or
+// todo: write a check if 2,0 1,1 0,2 match
 
 function checkForWin() {
     for (let i = 0; i < createGrid; i++) {
         for(let j = 0; j <createGrid; j++) {
-            if( gameBoard[i][j] !== null ) {
-                if( gameBoard[i][0] === gameBoard[i][1] && gameBoard[i][1] === gameBoard[i][2]) {
+            if( gameBoard[i][j] != null ) {
+                // check rows for win
+                if(gameBoard[i][0] == gameBoard[i][1] && gameBoard[i][1] == gameBoard[i][2]) {
                     console.log('you win');
                     return true;
                 }
-                else if( gameBoard[0][j] === gameBoard[1][j] && gameBoard[1][j] === gameBoard[2][j]) {
+                // check cols for win
+                else if(gameBoard[0][j] == gameBoard[1][j] && gameBoard[1][j] == gameBoard[2][j]) {
                     console.log('you win');
                     return true;
                 }
-                else if (
-                    gameBoard[0][0] === gameBoard[1][1] && gameBoard[1][1] === gameBoard[2][2] ||
-                    gameBoard[2][0] === gameBoard[1][1] && gameBoard[1][1] === gameBoard[0][2]) {
+                // check diag (ltr)
+                else if (gameBoard[0][0] == gameBoard[1][1] && gameBoard[1][1] == gameBoard[2][2]) {
                     console.log('you win');
                     return true;
                 }
-                else { // not really needed just here for testing
-                    console.log('keep playing');
-                    return false; 
-                }
+                // check diag (rtl)
+                // else if (gameBoard[0][2] == gameBoard[1][1] && gameBoard[1][1] === gameBoard[2][0]) {
+                //     console.log('you win');
+                //     return true;
+                // }
             }
         }
     }
 }
 
 // click handler attached to button to reset game
-// empty all the square of existing conent
-// clear the array back to the default state
+// empty all the squares of existing conent
+// clear the gameBoard array back to the default state
 // set current play variable back to player one
 // set the current turn messaging back to default
 // temporary: use alert to indicate new game
