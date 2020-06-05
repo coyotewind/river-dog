@@ -75,11 +75,8 @@ $('.square').click(renderBoard)
 // check that indices are not null and continue
 // check gameBoard rows for matching combination
 // check gameBoard cols for matching combination
-// todo: add check for diagnal win here
-// todo: write a check if 0,0 1,1 2,2 match or
-// todo: write a check if 2,0 1,1 0,2 match
-// todo: prevent continued play after win
-// todo: create  better message for winner
+// check gameBoard diagnola for matching conditions
+// things really started worknig after adding return true
 
 function checkForWin() {
     for (let i = 0; i < createGrid; i++) {
@@ -99,7 +96,7 @@ function checkForWin() {
                     console.log('you win');
                     return true;
                 }
-                else { 
+                else { // not really needed just here for testing
                     console.log('keep playing');
                     return false; 
                 }
