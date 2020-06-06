@@ -7,31 +7,29 @@
 }
 
 body {
-    font-family: 'Oswald',sans-serif;
+    color: #1A1A1A;
+    font-family: 'Permanent Marker',sans-serif;
     letter-spacing: 1px;
-    background-color: #EEEEEE;
+    background-color: #E9E9E9;
 }
 
 header {
     margin: 0 auto;
-    padding: 20px 0;
+    padding: 20px 0 40px;
     text-align: center;
     width: 800px
 }
 
-h1 { font-size: 50px; }
-h3 { 
-    font-size: 24px; 
-    font-weight: 400;
-}
+h1 { font-size: 60px; }
+h3 { color: #1261A0; font-size: 30px; }
 
-.game-board {
-    padding-bottom: 40px;
-}
+.content { padding-bottom: 40px; }
 
 .board { 
     background-color: #FFFFFF;
+    border: 1px solid #DDDDDD;
     border-radius: 20px;
+    box-shadow: 5px 5px 5px #CFCFCF;
     display: grid;
     grid-template-rows: 180px 220px 180px;
     grid-template-columns: 200px 240px 200px;
@@ -41,6 +39,16 @@ h3 {
     max-width: 720px;
     padding: 40px;
     transition: all 0.3s ease;
+}
+
+.board > div:nth-child(n+4):nth-child(-n+6) { 
+    border-top: 20px solid #1A1A1A;
+    border-bottom: 20px solid #1A1A1A;
+}
+
+.board > div:nth-child(3n+2) { 
+    border-left: 20px solid #1A1A1A;
+    border-right: 20px solid #1A1A1A;  
 }
 
 .square {
@@ -55,30 +63,7 @@ h3 {
     visibility: visible;
 }
 
-.board > div:nth-child(n+4):nth-child(-n+6) { 
-    border-top: 20px solid #1A1A1A;
-    border-bottom: 20px solid #1A1A1A;
-}
-
-.board > div:nth-child(3n+2) { 
-    border-left: 20px solid #1A1A1A;
-    border-right: 20px solid #1A1A1A;  
-}
-
-.upper-controls {
-    margin: 0px auto 30px;
-    max-width: 800px;
-    text-align: center;
-    width: 100%;  
-}
-
-.current-turn {
-    color: #5a1d41;
-    font-size: 24px;
-    font-weight: 700;
-}
-
-.lower-controls {
+.controls {
     margin: 0 auto;
     max-width: 800px;
     text-align: center;
@@ -86,7 +71,7 @@ h3 {
 }
 
 .btn {
-    background: #5a1d41;
+    background: #1261A0;
     border-radius: 10px;
     color: #FFFFFF;
     font-size: 19px;
@@ -96,5 +81,5 @@ h3 {
 }
 
 .btn:hover { 
-    background: #5a3d5c; 
+    background: #980F20; 
 }

@@ -1,13 +1,13 @@
-// global varibles for game state, board grid size, and current player
+// global varibles for game state, board grid size, current player, game over.
 
-let gameBoard = [];
 const createGrid = 3;
-let currentPlayer = 1;
-
+let gameBoard = [];
+let currentPlayer = 'One';
+let gameOver = false;
+let message = $('.message');
 
 // build the gameBoard as rows and columns as an array of arrays using a nested for loop
-// use for loop to set up empty array for each row and declare variable for identifying row by index
-// use another for loop to create the columns inside of each row and set the column value as null
+// set [i] to a null array to represent the row and set row[j] to null to represent the column
 // declare variable square to represent each cell and assign row and color using .data() method
 // this will gives access to the tow for row and column in other functions.
 
@@ -17,7 +17,7 @@ function buildBoard() {
         let row = gameBoard[i];
         for (let j = 0; j < createGrid; j++) {  
             row[j] = null;   
-            let square = $(`<div class="square" data-row="${i}" data-col="${j}">`);
+            let square = $(`<div class="square">`);
             square.data('row', i);
             square.data('col', j); 
             $('.board').append(square);
@@ -26,40 +26,34 @@ function buildBoard() {
 };
 buildBoard();
 
-
-// build click handler to render the board
-// declare variables for row & col indices
-// check if row and col is not null and allow click
-// check who is current play and toggle variable to the other player
-// update the text as 'x' or 'o' in the UI
-// update gameBoard array storing either an 'x' or 'o'
-// invoke the checkForWins() function 
-// todo: add checl for diagnal to checkForWins() function
-// todo: create some messaging or alert for the win
-// todo: prevent game play from continuing after win
+// build click handler to render board, first check if game is not over
+// then declare variables for row & col indices from .data() method
+// check if row and col is not null to prevent second click
+// check currentPlayer and toggle current Player to other player
+// update the 'x' or 'o' in the UI and in the gameBoard array
+// invoke checkForWins() then update messaging in the UI
 
 function renderBoard() {
-
-    let row = $(this).data().row;
-    let col = $(this).data().col;
-
-    if(gameBoard[row][col] == null ) {
-        if( currentPlayer == 1 ) {
-            currentPlayer = 2;
-            $(this).text('x') ;
-            gameBoard[row][col] = 'x'
-            
-        } else {
-            // invoke computerTurn() here
-            currentPlayer = 1;
-            $(this).text('o');
-            gameBoard[row][col] = 'o';
+    if(!gameOver) {
+        let row = $(this).data().row;
+        let col = $(this).data().col;
+        if(gameBoard[row][col] == null) {
+            if(currentPlayer == 'One') {
+                currentPlayer = 'Two';
+                $(this).text('x').css('color','#980F20');
+                gameBoard[row][col] = 'x';
+            } else {
+                // invoke computerTurn() here
+                currentPlayer = 'One';
+                $(this).text('o').css('color','#1261A0');
+                gameBoard[row][col] = 'o';
+            }
         }
-    }
-    checkForWin();
-
-    $('.current-turn').text(`Player ${ currentPlayer } Goes Next...`);
-
+        checkForWin();
+        gameOver 
+            ? message.text(`Player ${ currentPlayer } Wins The Game!`)
+            : message.text(`Player ${ currentPlayer } Goes Next...`)
+    }   
 }
 $('.square').click(renderBoard)
 
@@ -71,38 +65,33 @@ $('.square').click(renderBoard)
 // }
 
 
-// loop through rows and cols to set up variable for i and j
+// loop through rows and cols to set up variables for i and j
 // check that indices are not null and continue
-// check gameBoard rows for matching combination
-// check gameBoard cols for matching combination
-// todo: add check for diagnal win here
-// todo: write a check if 0,0 1,1 2,2 match or
-// todo: write a check if 2,0 1,1 0,2 match
+// check gameBoard for matching conditions (rows, cols, diags)
+// if conditions match mark gameOver true and return true
 
 function checkForWin() {
     for (let i = 0; i < createGrid; i++) {
         for(let j = 0; j <createGrid; j++) {
-            if( gameBoard[i][j] != null ) {
-                // check rows for win
-                if(gameBoard[i][0] == gameBoard[i][1] && gameBoard[i][1] == gameBoard[i][2]) {
-                    console.log('you win');
-                    return true;
-                }
-                // check cols for win
-                else if(gameBoard[0][j] == gameBoard[1][j] && gameBoard[1][j] == gameBoard[2][j]) {
-                    console.log('you win');
-                    return true;
-                }
-                // check diag (ltr)
-                else if (gameBoard[0][0] == gameBoard[1][1] && gameBoard[1][1] == gameBoard[2][2]) {
-                    console.log('you win');
-                    return true;
-                }
-                // check diag (rtl)
-                // else if (gameBoard[0][2] == gameBoard[1][1] && gameBoard[1][1] === gameBoard[2][0]) {
-                //     console.log('you win');
-                //     return true;
-                // }
+            // check rows for win
+            if(gameBoard[i][0] == gameBoard[i][1] && gameBoard[i][1] == gameBoard[i][2] && gameBoard[i][j] != null ) {
+                gameOver = true;
+                return true;
+            }
+            // check cols for win
+            if(gameBoard[0][j] == gameBoard[1][j] && gameBoard[1][j] == gameBoard[2][j] && gameBoard[i][j] != null ) {
+                gameOver = true;
+                return true;
+            }
+            // check diags for win 
+            if ( gameBoard[0][0] == gameBoard[1][1] && gameBoard[1][1] == gameBoard[2][2] && gameBoard[1][1] != null ) {
+                gameOver = true;
+                return true;
+            }
+            // check diags for win 
+            if ( gameBoard[0][2] == gameBoard[1][1] && gameBoard[1][1] == gameBoard[2][0] && gameBoard[1][1] != null) {
+                gameOver = true;
+                return true;
             }
         }
     }
@@ -116,15 +105,16 @@ function checkForWin() {
 // temporary: use alert to indicate new game
 
 function resetGame() {
+    gameOver = false;
     $('.square').empty();
     gameBoard = [
         [null, null, null], 
         [null, null, null], 
         [null, null, null]
     ] 
-    currentPlayer = 1;
-    $('.current-turn').text('Player One Goes First...');
-    alert('Start New Game');
+    currentPlayer = 'One';
+    message.text('Player One Goes First...');
+    // alert('Start New Game');
 }
 $('.btn-reset').click(resetGame);
 
