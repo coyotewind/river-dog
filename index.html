@@ -4,27 +4,52 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TIC TAC TOE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Permanent+Marker&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Permanent+Marker&display=swap" rel="stylesheet" />
     <link rel="stylesheet"href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" />
     <link rel="stylesheet" href="style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>    
-    <script defer src="app.js"></script>
 </head>
 <body>
-    <div id="app">
-        <header>
-            <h1>Tic Tac Toe</h1>
-            <h3 class="message">Player One Goes First...</h3>
-        </header>    
-        <main>
-            <div class="content">
-                <div class="board"></div>
+
+    <header>
+        <h1>Tic Tac Toe</h1>
+        <h3 class="message">Watch Me Grow</h3>
+    </header>   
+
+    <main>
+        <div class="content">
+            <div class="row">
+                <div class="col">
+                    <a href="./tic-tac-toe-1"><span>Version<br>One</span></a>
+                    <div class="text">
+                        This is me just learning to crawl. Not much to report here. You can play a simple game by manually entering move for both players. There is only one check for win, if you make "x" have three in a row in the top row.
+                    </div>
+                    <div class="text">
+                        I used a 1D array for my game state and was a little stuck. Plus my initial check for wins was simply brute force, and it would not have been great to write out a complex conditions with 16 iterations, hence I abandoned it early for a different approach.
+                    </div>
+                </div>
+                <div class="col">
+                    <a href="./tic-tac-toe-2"><span>Version<br>Two</span></a>
+                    <div class="text">
+                        Here I am walking, taking my first baby steps towards, working with a 2D array and a more complex rule set. Again both players are manual entry, however the UI is improved and there is a proper check for wins.
+                    </div>
+                    <div class="text">
+                        The biggest challenge was learning how to extract the data save in the game state array and use it for the check for wins. Eventually that all came together. I was able to explored using nested loops and I also created a game over check, which was useful.
+                    </div>
+                </div>
+                <div class="col">
+                    <a href="./tic-tac-toe-3"><span>Version<br>Three</span></a>
+                    <div class="text">
+                        Finally getting my stride, although still not flying. Here I was able to make is so that the computer plays their move autmatically. This was most definitely the most challenging and interesting part of the project.
+                    </div>
+                    <div class="text">
+                        This was a great exercise in learning to interact more with arrays; I was able to make a counter to integrate with my check for a draw function, and learned to set a time-out to make the computer's turn seem more natural. Yet there is a very subtle bug here. Can you find it?
+                    </div>
+                </div>
             </div>
-            <div class="controls">
-                <button class="btn btn-reset">New Game</button>
-            </div>
-        </main>
-    </div> 
+        </div>
+    </main>
+
 </body>
 </html>

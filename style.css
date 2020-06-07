@@ -7,79 +7,64 @@
 }
 
 body {
-    color: #1A1A1A;
-    font-family: 'Permanent Marker',sans-serif;
+    font-family: 'Permanent Marker', sans-serif;
     letter-spacing: 1px;
-    background-color: #E9E9E9;
 }
 
 header {
     margin: 0 auto;
-    padding: 20px 0 40px;
+    padding: 20px 0;
     text-align: center;
-    width: 800px
+    width: 800px;
 }
 
-h1 { font-size: 60px; }
-h3 { color: #1261A0; font-size: 30px; }
+h1 {
+    font-size: 50px;
+}
+h3 {
+    font-size: 24px;
+    font-weight: 400;
+}
 
-.content { padding-bottom: 40px; }
-
-.board { 
-    background-color: #FFFFFF;
-    border: 1px solid #DDDDDD;
-    border-radius: 20px;
-    box-shadow: 5px 5px 5px #CFCFCF;
-    display: grid;
-    grid-template-rows: 180px 220px 180px;
-    grid-template-columns: 200px 240px 200px;
-    grid-gap: 0;
+.row {
+    display: flex;
     height: 100%;
     margin: 0 auto;
-    max-width: 720px;
-    padding: 40px;
-    transition: all 0.3s ease;
-}
-
-.board > div:nth-child(n+4):nth-child(-n+6) { 
-    border-top: 20px solid #1A1A1A;
-    border-bottom: 20px solid #1A1A1A;
-}
-
-.board > div:nth-child(3n+2) { 
-    border-left: 20px solid #1A1A1A;
-    border-right: 20px solid #1A1A1A;  
-}
-
-.square {
-    align-items: center;
-    font-family: 'Permanent Marker', sans-serif;
-    font-size: 144px;
-    display: flex;
-    justify-content: center;
-    opacity: 1;
-    padding-bottom: 20px;
-    transition: opacity 0.3 ease-in-out, visibility 0.3s ease-in-out; 
-    visibility: visible;
-}
-
-.controls {
-    margin: 0 auto;
-    max-width: 800px;
+    max-width: 1920px;
+    padding: 20px;
     text-align: center;
-    width: 100%;  
+    width: 100%;
+}
+.col {
+    margin: 0 20px;
+    text-align: center;
+    width: 33.333333%;
+
 }
 
-.btn {
-    background: #1261A0;
-    border-radius: 10px;
-    color: #FFFFFF;
-    font-size: 19px;
-    font-weight: 700;
-    padding: 15px;
+.col a {
+    align-items: center;
+    background: #1261a0;
+    border-radius: 50%;
+    color: #ffffff;
+    display: flex;
+    height: 200px;
+    font-size: 30px;
+    justify-content: center;
+    line-height: 1.1;
+    padding-bottom: 0;
+    margin: 0 auto 30px;
+    text-decoration: none !important;
     width: 200px;
 }
 
-.btn:hover { 
-    background: #980F20; 
+.col a:hover {
+    background: #980f20;
+}
+
+.text {
+    font-family: 'Open Sans';
+    font-size: 18px;
+    margin-bottom: 20px;
+    padding: 0 20px;
 }
