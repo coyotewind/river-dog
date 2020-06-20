@@ -1,265 +1,191 @@
-// GLOBALS
+// global constant variable for board grid size
+// global let variables for game state, current player, game over & messaging
 
-const BASE_URL = 'https://jsonplace-univclone.herokuapp.com';
+const createGrid = 3;
+let gameBoard = [];
+let currentPlayer = 'One';
+let winningPlayer = 'Two';
+let gameOver = false;
+let message = $('.message');
+let counter = 0;
+let isDraw = false;
+let xScore = 0;
+let yScore = 0;
 
-// FETCHING DATA
+// build the gameBoard as an array of arrays using a nested for loop
+// set gamboare[i] to null & assign row variable, and set row[j] & assign col variable
+// declare variable square, set up the id to be used later for computerTurn()
+// using .data() method attach row as i and j as col, to be used later in renderBoard()
 
-function fetchData(url) {
-    // generic resuable fetch that handles the JSON result and error catch
-    // input URL param is coming from one of the four fetch functions below
-    return fetch(url)
-    .then( function (result) { return result.json(); })
-    .catch( function (error) { console.error(error); });
-}
-
-function fetchUsers() { 
-    // fetch users
-    // this URL is being sent to fetchData()
-    return fetchData( `${ BASE_URL }/users` ); 
-}
-
-function fetchUserAlbumList(userId) { 
-    // fetch user's album list
-    return fetchData( `${ BASE_URL }/users/${ userId }/albums?_expand=user&_embed=photos` );
-}
-
-function fetchUserPosts(userId) { // fetch user's post list
-    return fetchData(`${ BASE_URL }/users/${ userId }/posts?_expand=user`);
-}
-
-function fetchPostComments(postId) { // fetch user's post's comments
-    return fetchData(`${ BASE_URL }/posts/${ postId }/comments`);
-}
-
-// USER & USERS LIST
-
-// start work on the inner most object/element first
-// goal: as a user, I want to build the HTML for the 'user card' and make the .data() accessible
-// input: accepts a parameter called 'user' from the renderUserlist() function
-// output: HTML for a 'user card' and accessible 'data' via .data() method
-
-function renderUser(user) { 
-    // user param is coming from renderUserList()
-    return $(`
-        <div class="user-card" data-user="${user.id}">
-            <header>
-                <h2>${user.name}</h2>
-            </header>
-            <section class="company-info">
-                <p><b>Email:</b> ${user.email}</p>
-                <p><b>Company:</b> ${user.company.name}</p>
-                <p><b>Tagline:</b> "${user.company.catchPhrase}"</p>
-            </section>
-            <footer>
-                <button class="load-posts">POSTS BY ${user.username}</button>
-                <button class="load-albums">ALBUMS BY ${user.username}</button>
-            </footer>
-        </div>
-    `).data('user', user); // so we can access this later
-}
-
-// then work on the outer most object/element
-// goal: as a user I want to build and display the 'userlist' as a set of 'user' cards
-// input: accepts a param called 'userList' that is coming from fetch(Users) 'data' then
-// output: loops through the 'userList' for each 'user' & appends a set of 'user' cards to '#user-list' 
-
-function renderUserList(userList) {
-    $('#user-list').empty();
-    userList.forEach(function (user) {
-        $('#user-list').append(renderUser(user));
-    })
-}
-
-// PHOTOS, ALBUM, & ALBUM LIST
-
-// start work on the inner most object/element first
-// goal: as a user, I want to build the HTML with the photo 'data' send it to the album's photo card
-// input: accepts a parameter called 'photo' from the renderAlbum() function
-// output: HTML for a photo card and accessible 'data' via .data() method
-
-function renderPhoto(photo) {
-     return $(`
-        <div class="photo-card">
-            <a href="${photo.url}" target="_blank">
-            <img src="${photo.thumbnailUrl}">
-            <figure>${photo.title}</figure>
-            </a>
-        </div>
-    `)
-}
-
-// continue work on the 'middlest' object/element
-// goal: as a user, I want to build the HTML for the 'album' card, which contains the 'photo' card
-// input: accepts a parameter called 'album' from the renderAlbumList() function
-// runs: loops through the 'album photos' for each 'photo' to 'photo-list' via renderPhoto() function 
-// output: HTML for an 'album' which includes a nested, fully formed 'photo card'
-
-function renderAlbum(album) {
-    
-    album.photos.forEach(function (photo) {
-        $('.photo-list').append(renderPhoto(photo));
-    })
-    return $(`
-    <div class="album-card">
-        <header><h3>${album.title} by ${album.username}</h3></header>
-        <div class="photo-list"></div>
-    </div>
-    `);
-}
-
-// lastly work on the outer most object/element
-// goal: as a user I want to build and display the 'albumList' as a set of 'album' cards
-// input: accepts a parameter called 'albumList' from the fetchAlbumList() function
-// output: loops through the 'albumList' for each 'album' & appends a set of 'albums' cards to '#album-list' 
-// output: toggles active class to show or hide the album list in the UI.
-
-function renderAlbumList(albumList) {
-    $('#app section.active').removeClass('active');
-    const albumListEl = $('#album-list');
-    albumListEl.empty()
-    albumList.forEach(function(album) {
-        albumListEl.append(renderAlbum(album));
-    });
-    albumListEl.addClass('active');
-}
-
-// COMMENTS, POST, & POST LIST
-
-// start work on the inner most object/element first
-// goal: as a user, I want check prevent comment from being fetched if I have already fetched them 
-// input: accepts a parameter called 'post' from the [CLICK HANDLERS ???]
-// output: HTML for a photo card and accessible 'data' via .data() method
-
-// PLEASE explain what is truly happening here, I understand whole conditional
-// Yet, I do not understand the flow of data through this function
-
-function setCommentsOnPost(post) {
-    // where is this param coming from?
-    if (post.comments) {
-        return Promise.reject();
-    } else {
-        return fetchPostComments(post.id).then( function (comments) {
-            post.comments = comments;
-            return post;
-        });
-   }
-}
-
-// goal: as a user I want to see comments when 'show' is clicked
-// goal: as a user I do not want to see comments whem 'hide' is clicked
-// input: accepts a parameter called 'postCardEl' from the found '.footer'about
-// output: conditionally toggles the comment state and updates the link text 
-
-function toggleComments(postCardEl) {
-    const footerEl = postCardEl.find('footer');
-    if (footerEl.hasClass('comments-open')) {
-        footerEl.removeClass('comments-open');
-        footerEl.find('.verb').text('show');
-    } else {
-        footerEl.addClass('comments-open');
-        footerEl.find('.verb').text('hide');
+function buildBoard() {
+    for (let i = 0; i < createGrid; i++) {
+        gameBoard[i] = [];
+        let row = gameBoard[i];
+        for (let j = 0; j < createGrid; j++) {  
+            row[j] = null;   
+            let square = $(`<div id="index-${i}-${j}" class="square">`);
+            square.data('row', i);
+            square.data('col', j); 
+            $('.board').append(square);
+        }
     }
-  }
+};
+buildBoard();
 
-// continue work on the 'middlest' object/element
-// goal: as a user, I want to build the HTML for the 'post' card and make the .data() accessible
-// input: accepts a parameter called 'post' from the renderPostList() function
-// output: HTML for a 'post card' and accessible 'data' via .data() method
+// declare row & col from .data() method
+// if [row][col] is not null, prevent second click
+// check currentPlayer and toggle to other player
+// update the 'x' or 'o' in the UI and in the gameBoard array
+// invoke checkForWins(), then update messaging in the UI
 
-function renderPost(post) {
-    return $(`
-        <div class="post-card">
-            <header>
-                <h3>${post.title} </h3>
-                <h4>~ By ${post.user.username}</h4>
-            </header>
-            <p>${post.body}</p>
-            <footer>
-                <div class="comment-list"></div>
-                <a href="#" class="toggle-comments">(<span class="verb">show</span> comments)</a>
-            </footer>
-        </div>
-    `).data('post', post);
+function renderBoard() {
+    let row = $(this).data().row;
+    let col = $(this).data().col;
+    if(!gameOver) { 
+        if(gameBoard[row][col] == null) {
+            if(currentPlayer == 'One') {
+                winningPlayer = 'One'
+                currentPlayer = 'Two';
+                $(this).text('x').css('color','#980F20');
+                gameBoard[row][col] = 'x';
+                counter++
+            } 
+        }
+        updateAll();
+        autoPlay();
+    }   
+}
+$('.square').click(renderBoard)
+
+
+// set up empty cells array variable & loop through & create array of available cells 
+// choose a random cell from array of availalbe cells and map indices to varibles
+// update the array notating square captured by computer and update the UI
+// update the current player and winning player status
+// todo: figure out how to invoke the computer player
+// todo: also check for win and game over
+
+function computerTurn() {
+
+    if(!gameOver && counter < 9) {
+        let cells = [];
+        for (let i = 0; i < createGrid; i++) {
+            for(let j = 0; j <createGrid; j++) {
+                if(!gameBoard[i][j]) {
+                    cells.push([i,j]);
+                }
+            }
+        }
+        move = cells[Math.floor(Math.random() * cells.length)];
+        row = move[0]; col = move[1];
+        gameBoard[row][col] = 'o';
+        cell = document.getElementById('index-' + row + '-' + col);
+        cell.innerHTML = 'o'; cell.style.color="#1261A0"
+        currentPlayer = 'One'; 
+        winningPlayer = 'Two'
+        counter++
+        updateAll();
+    }
+
 }
 
-// lastly work on the outer most object/element
-// goal: as a user I want to build and display the 'postList' as a set of 'post' cards
-// input: accepts a parameter called 'postList' from the fetchPostList() function
-// output: loops through the 'postList' for each 'post' & appends a set of 'post' cards to '#post-list' 
-// output: toggles active class to show or hide the post list in the UI.
-
-function renderPostList(postList) {
-    $('#app section.active').removeClass('active');
-    const postListEl = $('#post-list');
-    postListEl.empty()
-    postList.forEach(function(post) {
-        postListEl.append(renderPost(post));
-    });
-    postListEl.addClass('active');
+function autoPlay() {
+    setTimeout(function(){ computerTurn(); }, 1000);
 }
 
-//CLICK HANDLERS
+// loop through rows and cols to set up variables for i and j
+// check gameBoard for matching conditions on rows, cols, and diags 
+// if conditions match mark gameOver and return true
 
-// goal: as a user I want click a button to display posts
-// input: runs when the '.load-posts' button is clicked
-// output: calls fetchUserPosts() promise and then calls rendersPostList() function
+function checkForWin() {
+    // check rows for win
+    for ( let row = 0; row < createGrid; row++) {
+        if ( gameBoard[row][0] === gameBoard[row][1] && gameBoard[row][1] === gameBoard[row][2] && gameBoard[row][1] !== null) {
+            gameOver = true;
+            return true;
+        }
+    }
+    // check col for win
+    for ( let col = 0; col < createGrid; col++) {
+        if ( gameBoard[0][col] === gameBoard[1][col] && gameBoard[1][col] === gameBoard[2][col] && gameBoard[1][col] !== null ) {
+            gameOver = true;
+            return true;
+        }
+    }  
+    // check diags for win 
+    if ( gameBoard[0][0] == gameBoard[1][1] && gameBoard[1][1] == gameBoard[2][2] && gameBoard[1][1] != null ) {
+        gameOver = true;
+        return true;
+    }
+    // check diags for win 
+    if ( gameBoard[0][2] == gameBoard[1][1] && gameBoard[1][1] == gameBoard[2][0] && gameBoard[1][1] != null) {
+        gameOver = true;
+        return true;
+    }
+}
 
-$('#user-list').on('click', '.user-card .load-posts', function () {
-    const user = $(this).closest('.user-card').data('user');
-    fetchUserPosts(user.id).then(renderPostList);
-});
+function checkGameOver() {
+    gameOver == true && isDraw == false
+        ? message.text(`Player ${ winningPlayer } Wins The Game!`)
+        : message.text(`Player ${ currentPlayer } Goes Next...`)
+}
 
-// goal: as a user I want to click a button to display albums
-// input: runs when the '.load-albums' button is clicked
-// output: calls fetchUserAlbumList() promise and then calls renderAlbumList() function
+function checkForDraw() {
+    if(!gameOver && counter == 9) {
+        isDraw = true;
+        message.text(`It's a draw! Want To Play Again?`);
+    } 
+}
 
-$('#user-list').on('click', '.user-card .load-albums', function () {
-    const user = $(this).closest('.user-card').data('user');
-    fetchUserAlbumList(user.id).then(renderAlbumList);
-});
+function winCounter() {
+    if(gameOver == true && isDraw == false && winningPlayer == 'One') {
+        xScore++;
+        $('.x-score').text(xScore);
 
-// goal: as a user I want to click a button to toggle comments
-// input: runs when the '.toggle-comments' button is clicked
-// output: HTML for the comments and toggles their visibility
+        console.log(xScore,'x wins');
+    } 
+    if(gameOver == true && isDraw == false && winningPlayer == 'Two') {
+        yScore++;
+        $('.y-score').text(yScore);
+        console.log(yScore,'y wins');
+    } 
+}
 
-$('#post-list').on('click', '.post-card .toggle-comments', function () {
-    const postCardEl = $(this).closest('.post-card');
-    const post = postCardEl.data('post'); 
-    const commentEl = postCardEl.find('.comment-list');
+function updateAll() {
+    checkForWin();
+    checkGameOver();
+    checkForDraw();
+    winCounter();
+}
 
-    // PLEASE explain what is truly happening here
-    // Still, I do not understand the flow of data through this function
+// on button click to clear UI squares and set gameBoard array to default state
+// set currentPlayer to player one, winnerPlayer to player two
+// set the messaging back to default state and rest counter to zero
+// set gameOver and isDraw to false
+
+function resetGame() {
+    $('.square').empty();
+    gameBoard = [[null, null, null], [null, null, null], [null, null, null]] 
+    currentPlayer = 'One';
+    winningPlayer = 'Two';
+    message.text('Player One Goes First...');
+    counter = 0;
+    gameOver = false;
+    isDraw = false;
     
-    setCommentsOnPost(post)
-    .then(function (post) { // first time clicked it will load comments & toggle
-        post.comments.forEach(function(comment) {
-            commentEl.empty()
-            commentEl.append(
-                $(`
-                    <h3>
-                        <div>${comment.body}</div>
-                        <div>${comment.email}</div>
-                    </h3>
-                `)
-            )
-        })
-        toggleComments(postCardEl)
-    })
-    .catch(function () { // does not reload on successive clicks, only toggle
-        toggleComments(postCardEl)
-    });
-});
-
-// INITIALIZE & EXECUTE
-
-// goal: as a user I want a list of users to be display on page load
-// input: when the page loads fetchUsers() is invoked and returns a fulfilled promise
-// output: the rendered user list loads the HTML for a set of user cards
-
-function bootstrap() {
-    fetchUsers().then(function (data) { renderUserList(data); });
-    // fetchUsers().then(renderUserList); not a fan
-    // refactored code is not explicit enough to remember
 }
+$('.btn-new-game').click(resetGame);
 
-bootstrap();
+function resetMatch() {
+    xScore = 0;
+    yScore = 0;
+    $('.x-score').text(xScore);
+    $('.y-score').text(xScore);
+    resetGame();
+}
+$('.btn-reset-match').click(resetMatch);
+
+// STRETCH: Allow user to choose X or O before game starts but X will always go first
+// STRETCH: Create score board for games won
+// STRETCH: The winner of the previous game will alawys go first
+// STRETCH: Button to clear score board, reset game (restore who goes first to default)

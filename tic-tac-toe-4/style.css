@@ -1,232 +1,139 @@
 * {
-  border: 0;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  outline: none;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none !important;
 }
 
 body {
-  font-family: 'Open Sans', sans-serif;
-  line-height: 1.63;
+    background: url('bg_game.jpg');
+    color: #1A1A1A;
+    font-family: 'Permanent Marker',sans-serif;
+    letter-spacing: 1px;
+    background-color: #E9E9E9;
 }
-
 #app {
-  display: grid;
-  grid-template-columns: 480px minmax(480px, 1fr);
-  grid-gap: 0;
-  height: 100%;
+    display: flex;
+    align-content: center;
+    justify-items: center;
+    flex-flow: column nowrap;
 }
 
-#app > aside {
-  background-color: #34949e;
-  height: 100vh;
-  padding: 24px 24px 0;
-  grid-column: 1;
-  justify-content: center;
+header, footer, main {
+    display: flex; 
+    flex-flow: row wrap;
+    align-content: center;
+    justify-items: center;
+    flex-grow: 1;
+    height: 150px;
+    width: 100%
 }
 
-#app aside button {
-  background-color: #edd1e1;
-  color: #1A1A1A;
-  font-weight: bold;
-  letter-spacing: 0;
+header {
+    margin: 0 auto;
+    padding: 10px;
+    text-align: center;
 }
 
-#app aside button:hover {
-  opacity: 0.9;
+h1 { align-content: center; justify-items: center; font-size: 60px; line-height: 1; width: 100%; }
+h3 { align-content: center; justify-items: center; font-size: 30px; line-height: 1; width: 100%; }
+
+main {
+    height: calc(100vh - 300px);
 }
 
-#user-list,
-#post-list,
-#album-list {
-  /* display: grid; */
-  grid-gap: 24px;
-  overflow-y: scroll;
+.content { padding-bottom: 40px; margin: 0 auto; }
+
+.board { 
+    background-color: rgba(255,255,255,0.8);
+    border: 1px solid #DDDDDD;
+    border-radius: 20px;
+    box-shadow: 5px 5px 5px #CFCFCF;
+    display: grid;
+    grid-template-rows: 140px 180px 140px;
+    grid-template-columns: 160px 200px 160px;
+    grid-gap: 0;
+    height: 100%;
+    margin: 0 auto;
+    max-width: 600px;
+    padding: 40px;
+    transition: all 0.3s ease;
 }
 
-#post-list,
-#album-list {
-  overflow-y: hidden;
+.board > div:nth-child(n+4):nth-child(-n+6) { 
+    border-top: 20px solid #1A1A1A;
+    border-bottom: 20px solid #1A1A1A;
 }
 
-#instructions {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  justify-content: center;
+.board > div:nth-child(3n+2) { 
+    border-left: 20px solid #1A1A1A;
+    border-right: 20px solid #1A1A1A;  
 }
 
-#user-list {
-  grid-template-columns: 1fr;
-  grid-template-rows: repeat(auto-fit, 1fr);
+.square {
+    align-items: center;
+    font-family: 'Permanent Marker', sans-serif;
+    font-size: 120px;
+    display: flex;
+    justify-content: center;
+    opacity: 1;
+    padding-bottom: 20px;
+    transition: opacity 0.3 ease-in-out, visibility 0.3s ease-in-out; 
+    visibility: visible;
 }
 
-#app main {
-  flex: 1;
-  grid-column: 2;
-  height: 100vh;
-  background: #fee2b3;
-  padding: 24px;
-  overflow-y: scroll;
+.controls {
+    display: grid;
+    grid-template-rows: 200px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 0;
+    margin: 0 auto 40px;
+    max-width: 680px;
+    padding: 0 40px;
+    text-align: center;
+    width: 100%;  
 }
 
-#app main > section:not(.active) {
-  display: none;
+.cols:first-child,
+.cols:last-child {
+    font-size: 20px;
+    padding: 10px 0 0 0;
 }
 
-.user-card {
-  background: #edd1e1;
-  font-family: sans-serif;
-  margin-bottom: 24px;
+.score {
+    padding-bottom: 5px;
 }
 
-.user-card header,
-.user-card section,
-.user-card footer {
-  padding: 20px;
+.x-score,
+.y-score {
+    font-size: 30px;
 }
 
-.user-card section {
-  padding: 30px 20px;
+.btn {
+    background: #1261A0;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding: 15px;
+    width: 200px;
 }
 
-.user-card header,
-.user-card footer {
-  background: #5a1d41;
-  color: #FFFFFF;
-  text-align: center;
+.btn:hover { 
+    background: #980F20; 
 }
 
-.user-card section {
-
+.controls a {
+    color: #1A1A1A;
+    display: block;
+    font-family: 'Open Sans',sans-serif;
+    padding-bottom: 10px;
+    text-decoration: underline;
 }
 
-.user-card section p:not(:last-of-type) {
-  margin-bottom: 10px;
-}
-
-.user-card footer {
-  display: flex;
-  flex-direction: column;
-}
-
-.user-card footer button {
-  border-radius: 10px;
-  padding: 15px;
-  font-size: 16px;
-  background: #fff;
-  text-transform: uppercase;
-}
-
-.user-card footer button:not(:last-of-type) {
-  margin-bottom: 20px;
-}
-
-#post-list {
-  grid-template-columns: 1fr;
-  grid-gap: 24px;
-}
-
-.post-card {
-  background: #FFFFFF;
-  margin-bottom: 24px;
-}
-
-.post-card header {
-  padding: 15px 30px;
-  background: #5a1d41;
-  color: #FFFFFF;
-}
-
-.post-card h3 {
-  font-weight: 700;
-  text-transform: capitalize;
-}
-.post-card h4 {
-  font-weight: 400;
-  text-transform: capitalize;
-}
-
-.post-card p {
-  padding: 30px;
-}
-
-.post-card footer {
-  padding: 30px;
-  background: #edd1e1;
-}
-
-.comment-list h3 {
-  margin-bottom: 20px;
-  display: none;
-}
-
-.comments-open h3 {
-  display: block;
-}
-
-.comments-open div {
-  font-size: 16px;
-  font-weight: 400;
-  margin-bottom: 10px;
-}
-
-
-#album-list {
-  grid-template-rows: repeat(auto-fit, auto);
-}
-
-.album-card {
-  display: grid;
-  grid-template-rows: 90px auto;
-  color: #ffe;
-  margin-bottom: 24px;
-}
-
-.album-card header {
-  background: #5a1d41;
-  padding: 30px;
-  text-transform: capitalize;
-}
-
-.photo-list {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  overflow-x: scroll;
-  background: #edd1e1;
-  padding: 30px 15px;
-}
-
-.photo-card {
-  border: 1px solid #ffe;
-  display: flex;
-  align-items: stretch;
-  background: #fff;
-}
-
-.photo-card {
-  margin: 0 20px;
-}
-
-.photo-card figure {
-  color: black;
-  font-size: 16px;
-  margin-top: 20px;
-  text-align: center;
-  text-decoration: none;
-}
-
-.photo-card a {
-  padding: 20px 20px 0  ;
-  display: flex;
-  flex-direction: column;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.photo-card img {
-  width: 250px;
+.controls a:hover {
+    color: #980F20;
+    text-decoration: underline;
 }

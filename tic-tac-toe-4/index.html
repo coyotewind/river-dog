@@ -1,36 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TIC TAC TOE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Permanent+Marker&display=swap" rel="stylesheet" />
+    <link rel="stylesheet"href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" />
     <link rel="stylesheet" href="style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>    
     <script defer src="app.js"></script>
-  </head>
-  <body>
-    
+</head>
+<body>
     <div id="app">
-
-      <aside id="user-list"></aside>
-
-      <main>
-
-        <section id="instructions" class="active">
-          <h2>Welcome To Our App</h2>
-          <p>On the left you'll see some users. Each has a button which will load posts they've made, and albums they've uploaded.</p>
-          <p><b>Post View</b>  - Posts have a toggle when clicked  to show/hide the comments.</p>
-          <p><b>Album View</b> - Images when clicked open the full image in a new tab.</p>
-        </section>
-
-        <section id="post-list"></section>
-
-        <section id="album-list"></section>
-        
-      </main>
-
-    </div>
-
-  </body>
+        <header>
+            <h1>Tic Tac Toe</h1>
+            <h3 class="message">Player One Goes First...</h3> 
+        </header>    
+        <main>
+            <div class="content">
+                <div class="board"></div>
+            </div>
+            
+        </main>
+        <footer>
+            <div class="controls">
+                <div class="cols">
+                    <div class="score">Player One</div>
+                    <div class="x-score">0</div>
+                </div>
+                <div class="cols">
+                    <button class="btn btn-new-game">New Game</button>
+                    <a class="btn-reset-match" href="#">Reset Score</a>
+                    <a href="../index.html">Go Back</a>
+                </div>
+                <div class="cols">
+                    <div class="score">Player Two</div>
+                    <div class="y-score">0</div>
+                </div>
+            </div>
+        </footer>
+    </div> 
+</body>
 </html>
