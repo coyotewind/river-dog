@@ -21,5 +21,3 @@
 ### How I Would Uplevel It:
 
 - I would like to try to make more games using REACT instead of jQuery and Vanilla JS.
-
-https://river-dog.netlify.app/
